@@ -10,10 +10,66 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_05_222252) do
+ActiveRecord::Schema.define(version: 2018_12_30_195346) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "ingredient_types", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "ingredients", force: :cascade do |t|
+    t.string "name"
+    t.bigint "ingredient_type_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ingredient_type_id"], name: "index_ingredients_on_ingredient_type_id"
+  end
+
+  create_table "recipe_ingredients", force: :cascade do |t|
+    t.bigint "recipe_id"
+    t.bigint "ingredient_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ingredient_id"], name: "index_recipe_ingredients_on_ingredient_id"
+    t.index ["recipe_id"], name: "index_recipe_ingredients_on_recipe_id"
+  end
+
+  create_table "recipe_steps", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "recipe_id"
+    t.bigint "technique_id"
+    t.string "description"
+    t.index ["recipe_id"], name: "index_recipe_steps_on_recipe_id"
+    t.index ["technique_id"], name: "index_recipe_steps_on_technique_id"
+  end
+
+  create_table "recipes", force: :cascade do |t|
+    t.string "name"
+    t.string "desc"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "step_ingredients", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "recipe_step_id"
+    t.bigint "ingredient_id"
+    t.float "amount"
+    t.integer "amount_unit"
+    t.index ["ingredient_id"], name: "index_step_ingredients_on_ingredient_id"
+    t.index ["recipe_step_id"], name: "index_step_ingredients_on_recipe_step_id"
+  end
 
   create_table "techniques", force: :cascade do |t|
     t.string "name"
+    t.string "desc"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -1,2 +1,3 @@
 class Technique < ApplicationRecord
+  
 end
